@@ -15,10 +15,15 @@ class AddTaskPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          size: 40,
-          color: Color(0xFFEE6F57),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 40,
+            color: Color(0xFFEE6F57),
+          ),
         ),
         title: const Center(child: Text("Todo List")),
         actions: [
