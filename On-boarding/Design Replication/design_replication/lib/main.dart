@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "./onboarding.dart";
+import "./add_task.dart";
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Task Manager',
-      theme: ThemeData.dark(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const OnboardingPage(),
+      home: const AddTaskPage(),
     );
   }
 }
