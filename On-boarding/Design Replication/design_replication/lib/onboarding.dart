@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "./add_task.dart";
+import 'create_task.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -26,8 +26,10 @@ class OnboardingPage extends StatelessWidget {
                 backgroundColor:
                     const MaterialStatePropertyAll(Color(0xFF0C8CE9))),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddTaskPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CreateTaskPage()));
             },
             child: const Text(
               "Get Started",
