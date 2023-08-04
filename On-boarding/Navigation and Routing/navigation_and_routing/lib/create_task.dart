@@ -30,16 +30,6 @@ class CreateTaskPage extends StatelessWidget {
           ),
         ),
         title: const Center(child: Text("")),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, size: 40),
-            onPressed: () {},
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-        ],
-        leadingWidth: 80,
       ),
       body: Column(
         children: [

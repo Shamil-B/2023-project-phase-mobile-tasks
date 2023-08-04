@@ -35,7 +35,6 @@ class TaskDetail extends StatelessWidget {
           "Task Detail",
           style: TextStyle(fontWeight: FontWeight.bold),
         )),
-        leadingWidth: 40,
       ),
       body: Column(
         children: [
