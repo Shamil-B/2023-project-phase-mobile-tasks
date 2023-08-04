@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "./task_detail.dart";
 
 class AddTaskPage extends StatelessWidget {
   const AddTaskPage({super.key});
@@ -65,7 +66,10 @@ class AddTaskPage extends StatelessWidget {
                   padding: MaterialStatePropertyAll(
                       EdgeInsets.symmetric(vertical: 20, horizontal: 30)),
                   backgroundColor: MaterialStatePropertyAll(Color(0xFFEE6F57))),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TaskDetail()));
+              },
               child: const Text(
                 "Create Task",
                 style: TextStyle(color: Colors.white, fontSize: 20),
