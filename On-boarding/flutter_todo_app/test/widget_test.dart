@@ -75,6 +75,7 @@ void main() {
     expect(find.text('Test Task'), findsOneWidget);
   });
 
+    // Testing navigation from onboarding to home screen
   testWidgets('Navigate from onboarding.', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
