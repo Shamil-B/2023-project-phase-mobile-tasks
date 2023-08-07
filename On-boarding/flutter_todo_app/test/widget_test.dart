@@ -5,7 +5,6 @@ import 'package:todo_app/main.dart';
 import "package:todo_app/presentation/screens/home_screen.dart";
 import "package:todo_app/presentation/screens/onboarding.dart";
 import "package:todo_app/presentation/widgets/custom_dialog_newtodo.dart";
-// This is a basic Flutter widget test.
 
 void main() {
   // Testing the task creation
