@@ -5,6 +5,7 @@ abstract class TaskLocalDataSource {
   ToDoTask getTask(int id);
 
   void createTask(ToDoTask task);
+  ToDoTask markTask(ToDoTask task);
   ToDoTask updateTask(
       {required int id,
       String? newTitle,
@@ -54,5 +55,16 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
         description: description ?? tasks[id].description,
         deadline: newDeadline ?? tasks[id].deadline);
     return tasks[id];
+  }
+
+  @override
+  ToDoTask markTask(ToDoTask task) {
+    tasks[task.id] = ToDoTask(
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        deadline: task.deadline,
+        isDone: !task.isDone);
+    return tasks[task.id];
   }
 }

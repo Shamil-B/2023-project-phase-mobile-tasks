@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:main_todo_app/core/error/failure.dart';
+import 'package:main_todo_app/core/error/unknown_failure.dart';
 import 'package:main_todo_app/features/task%20managment.dart/data/datasources/task_local_data__source.dart';
 
 import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
@@ -13,36 +14,70 @@ class TaskRepositoryImpl implements TaskRepository {
   TaskRepositoryImpl({required this.localDataSource});
 
   @override
-  ToDoTask createTask(ToDoTask task) {
-    localDataSource.createTask(task);
-    return task;
+  Either<Failure, ToDoTask> createTask(ToDoTask task) {
+    try {
+      localDataSource.createTask(task);
+      return Right(task);
+    } catch (e) {
+      return Left(UnknownFailure());
+    }
   }
 
   @override
-  void deleteTask(int id) {
-    localDataSource.deleteTask(id);
+  Either<UnknownFailure, ToDoTask> deleteTask(int id) {
+    try {
+      localDataSource.deleteTask(id);
+      return Right(ToDoTask(id: 0, title: ""));
+    } catch (e) {
+      return Left(UnknownFailure());
+    }
   }
 
   @override
-  ToDoTask getTask(int id) {
-    return localDataSource.getTask(id);
+  Either<UnknownFailure, ToDoTask> getTask(int id) {
+    try {
+      final task = localDataSource.getTask(id);
+      return Right(task);
+    } catch (e) {
+      return Left(UnknownFailure());
+    }
   }
 
   @override
-  List<ToDoTask> getTasks() {
-    return localDataSource.getTasks();
+  Either<UnknownFailure, List<ToDoTask>> getTasks() {
+    try {
+      final List<ToDoTask> tasks = localDataSource.getTasks();
+      return Right(tasks);
+    } catch (e) {
+      return Left(UnknownFailure());
+    }
   }
 
   @override
-  ToDoTask updateTask(
+  Either<UnknownFailure, ToDoTask> updateTask(
       {required int id,
       String? newTitle,
       String? description,
       DateTime? newDeadline}) {
-    return localDataSource.updateTask(
-        id: id,
-        newTitle: newTitle,
-        description: description,
-        newDeadline: newDeadline);
+    try {
+      localDataSource.updateTask(
+          id: id,
+          newTitle: newTitle,
+          description: description,
+          newDeadline: newDeadline);
+      return Right(ToDoTask(id: 0, title: ""));
+    } catch (e) {
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
+  Either<UnknownFailure, ToDoTask> markTask(ToDoTask task) {
+    try {
+      localDataSource.markTask(task);
+      return Right(task);
+    } catch (e) {
+      return Left(UnknownFailure());
+    }
   }
 }

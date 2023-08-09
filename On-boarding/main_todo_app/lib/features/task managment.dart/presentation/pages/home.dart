@@ -97,22 +97,28 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 }
 
-class Task extends StatelessWidget {
+class Task extends StatefulWidget {
   const Task({
     required this.task,
     super.key,
   });
 
   final ToDoTask task;
+
+  @override
+  State<Task> createState() => _TaskState();
+}
+
+class _TaskState extends State<Task> {
   @override
   Widget build(BuildContext context) {
-    print(task.title);
     return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => task_detail.TaskDetail(task: task)));
+                builder: (context) =>
+                    task_detail.TaskDetail(task: widget.task)));
       },
       child: Card(
         shadowColor: Colors.black,
@@ -125,13 +131,18 @@ class Task extends StatelessWidget {
           child: ListTile(
             leading: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Text(
-                "",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+              child: Checkbox(
+                checkColor: Colors.white,
+                value: widget.task.isDone,
+                onChanged: (bool? value) {
+                  BlocProvider.of<TaskManagerBloc>(context)
+                      .add(TaskMarked(task: widget.task));
+                  setState(() {});
+                },
               ),
             ),
             title: Text(
-              task.title,
+              widget.task.title,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
             trailing: Container(
@@ -140,11 +151,7 @@ class Task extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    task.deadline!.day.toString() +
-                        " - " +
-                        task.deadline!.month.toString() +
-                        " - " +
-                        task.deadline!.year.toString(),
+                    "${widget.task.deadline!.day} - ${widget.task.deadline!.month} - ${widget.task.deadline!.year}",
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],

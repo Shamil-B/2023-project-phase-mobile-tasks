@@ -6,14 +6,14 @@ import '../../../../core/error/failure.dart';
 import '../entities/task.dart';
 import '../repository/task_repository.dart';
 
-class CreateTask {
+class MarkTask {
   final TaskRepositoryImpl repository;
 
-  CreateTask(this.repository);
+  MarkTask(this.repository);
 
-  Either<UnknownFailure, ToDoTask> call(ToDoTask newTask) {
-    if (repository.createTask(newTask).isRight()) {
-      return Right(newTask);
+  Either<UnknownFailure, ToDoTask> call(ToDoTask task) {
+    if (repository.markTask(task).isRight()) {
+      return Right(task);
     } else {
       return Left(UnknownFailure());
     }

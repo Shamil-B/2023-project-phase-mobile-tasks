@@ -11,6 +11,8 @@ import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/get_tasks.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/update_task.dart';
 
+import '../../domain/use cases/mark_task.dart';
+
 part 'task_manager_event.dart';
 part 'task_manager_state.dart';
 
@@ -28,6 +30,7 @@ class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
 
     final DeleteTask deleteTask = DeleteTask(repository);
     final UpdateTask updateTask = UpdateTask(repository);
+    final MarkTask markTask = MarkTask(repository);
     final CreateTask createTask = CreateTask(repository);
 
     on<TaskManagerEvent>((event, emit) {
@@ -45,6 +48,9 @@ class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
         deleteTask.call(event.task.id);
         List<ToDoTask> tasks = getTasks.call();
         emit(LoadedTasks(tasks: tasks));
+      } else if (event is TaskMarked) {
+        markTask.call(event.task);
+        // emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskUpdated) {
         updateTask.call(
             id: event.id,

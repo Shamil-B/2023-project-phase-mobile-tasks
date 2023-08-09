@@ -32,3 +32,8 @@ class TaskRequested extends TaskManagerEvent {
 }
 
 class TasksRequested extends TaskManagerEvent {}
+
+class TaskMarked extends TaskManagerEvent {
+  final ToDoTask task;
+  const TaskMarked({required this.task});
+}
