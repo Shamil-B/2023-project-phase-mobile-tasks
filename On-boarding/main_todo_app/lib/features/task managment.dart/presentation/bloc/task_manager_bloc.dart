@@ -35,18 +35,26 @@ class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
 
     on<TaskManagerEvent>((event, emit) {
       if (event is TasksRequested) {
-        List<ToDoTask> tasks = getTasks.call();
-        emit(LoadedTasks(tasks: tasks));
+        List<ToDoTask>? tasks = getTasks.call().isRight()
+            ? getTasks.call().getOrElse(() => [])
+            : null;
+        emit(LoadedTasks(tasks: tasks ?? []));
       } else if (event is TaskRequested) {
-        ToDoTask task = getTask.call(event.task.id);
+        ToDoTask task = getTask.call(event.task.id).isRight()
+            ? getTask.call(event.task.id).getOrElse(() => ToDoTask.empty())
+            : ToDoTask.empty();
         emit(TaskDetail(task: task));
       } else if (event is TaskAdded) {
         createTask.call(event.task);
-        List<ToDoTask> tasks = getTasks.call();
+        List<ToDoTask> tasks = getTasks.call().isRight()
+            ? getTasks.call().getOrElse(() => [])
+            : [];
         emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskDeleted) {
         deleteTask.call(event.task.id);
-        List<ToDoTask> tasks = getTasks.call();
+        List<ToDoTask> tasks = getTasks.call().isRight()
+            ? getTasks.call().getOrElse(() => [])
+            : [];
         emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskMarked) {
         markTask.call(event.task);
@@ -57,10 +65,14 @@ class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
             newTitle: event.title,
             description: event.description,
             newDeadline: event.deadline);
-        List<ToDoTask> tasks = getTasks.call();
+        List<ToDoTask> tasks = getTasks.call().isRight()
+            ? getTasks.call().getOrElse(() => [])
+            : [];
         emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskRequested) {
-        ToDoTask task = getTask.call(event.task.id);
+        ToDoTask task = getTask.call(event.task.id).isRight()
+            ? getTask.call(event.task.id).getOrElse(() => ToDoTask.empty())
+            : ToDoTask.empty();
         emit(TaskDetail(task: task));
       } else {
         emit(EmptyTasks());

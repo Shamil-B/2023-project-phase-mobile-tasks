@@ -12,4 +12,8 @@ class ToDoTask {
     this.deadline,
     this.isDone = false,
   });
+
+  factory ToDoTask.empty() {
+    return ToDoTask(id: 0, title: "");
+  }
 }

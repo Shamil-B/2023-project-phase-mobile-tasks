@@ -13,7 +13,7 @@ class GetTasks {
   Either<UnknownFailure, List<ToDoTask>> call() {
     final tasks = repository.getTasks();
     if (tasks.isRight()) {
-      return Right(tasks);
+      return Right(tasks.getOrElse(() => []));
     } else {
       return Left(UnknownFailure());
     }
