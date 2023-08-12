@@ -24,7 +24,7 @@ class OnboardingPage extends StatelessWidget {
                 padding: const MaterialStatePropertyAll(
                     EdgeInsets.symmetric(vertical: 15, horizontal: 30)),
                 backgroundColor:
-                    const MaterialStatePropertyAll(Color(0xFF0C8CE9))),
+                    const MaterialStatePropertyAll(Color(0xFFEE6F57))),
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const HomePage()));
