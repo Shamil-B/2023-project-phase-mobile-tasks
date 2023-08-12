@@ -2,11 +2,13 @@
 
 ## App Screenshot
 
+```
 ![App Screenshot](./screenshots/onboarding_page_screenshot.png){width=30%}
 ![App Screenshot](./screenshots/tasks_list_page_screenshot.png){width=30%}
 ![App Screenshot](./screenshots/task_detail_page_screenshot.png){width=30%}
 ![App Screenshot](./screenshots/create_task_page_screenshot.png){width=30%}
 ![App Screenshot](./screenshots/create_task_page_screenshot_2.png){width=30%}
+```
 
 This is a task management Flutter app that follows the principles of Clean Architecture. It provides a structured and organized approach to building a robust and maintainable application by separating concerns into different layers and enforcing clear boundaries.
 
