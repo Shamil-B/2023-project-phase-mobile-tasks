@@ -25,6 +25,8 @@ dependencies:
   http:
   # Local cache
   shared_preferences:
+  device_preview: ^1.1.0
+  flutter_riverpod: ^2.3.6
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +40,8 @@ flutter:
   assets:
     - assets/images/task_detail.png
     - assets/images/stickman.png
+    - assets/images/bg1.png
+    - assets/images/bg2.png
 
   # fonts:
   #   - family: Schyler

@@ -35,14 +35,13 @@ class TaskDetail extends StatelessWidget {
           icon: const Icon(
             Icons.arrow_back_ios,
             size: 40,
-            color: Color(0xFFEE6F57),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
         ),
-        title: const Center(
-            child: Text(
+        title: const Text(
           "Task Detail",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.w400),
+        ),
       ),
       body: BlocBuilder<TaskManagerBloc, TaskManagerState>(
         builder: (context, state) {

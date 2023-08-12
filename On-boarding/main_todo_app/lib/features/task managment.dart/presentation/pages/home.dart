@@ -4,14 +4,14 @@ import 'package:main_todo_app/features/task%20managment.dart/presentation/bloc/t
 import '../widgets/task_tile.dart';
 import 'create_task.dart';
 
-class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<AddTaskPage> createState() => _AddTaskPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> tasks = [];
@@ -21,12 +21,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
         title: const Center(
             child: Text(
           "Todo List",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.w400),
         )),
       ),
       body: BlocBuilder<TaskManagerBloc, TaskManagerState>(
         builder: (context, state) {
-          print(state);
           if (state is LoadedTasks) {
             tasks = state.tasks
                 .map((task) => TaskTile(
@@ -39,13 +38,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
           return Column(
             children: [
               Container(
-                padding: const EdgeInsets.only(
-                    left: 140, right: 140, top: 20, bottom: 20),
-                child: const Image(
-                    image: AssetImage("assets/images/stickman.png")),
-              ),
-              Container(
                 alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(top: 30, bottom: 20),
                 padding: const EdgeInsets.only(left: 50),
                 child: const Text(
                   "Tasks List",
@@ -55,7 +49,31 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               Expanded(
                 child: ListView(
-                  children: tasks,
+                  children: (tasks.isEmpty)
+                      ? [
+                          Container(
+                            margin: const EdgeInsets.only(top: 200),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.not_interested_outlined,
+                                    size: 35, color: Colors.black),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  child: const Text(
+                                    "No tasks yet",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ]
+                      : tasks,
                 ),
               ),
               Container(

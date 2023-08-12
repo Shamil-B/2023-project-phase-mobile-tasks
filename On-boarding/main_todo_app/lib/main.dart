@@ -1,10 +1,21 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'features/task managment.dart/presentation/pages/home.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'features/task managment.dart/presentation/bloc/task_manager_bloc.dart';
+import "./features/task managment.dart/presentation/pages/onboarding.dart";
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) =>
+          const ProviderScope(child: MyApp()), // Wrap your app
+    ),
+  );
 }
 
 // in order to provide the bloc to the widget tree, we need to wrap the widget tree with BlocProvider
@@ -22,11 +33,14 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         title: 'Task Manager',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const AddTaskPage(),
+        home: const OnboardingPage(),
       ),
     );
   }

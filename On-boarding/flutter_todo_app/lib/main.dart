@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/config/theme/app_theme.dart';
-import 'package:todo_app/presentation/screens/home_screen.dart';
 import "./presentation/screens/onboarding.dart";
 
 void main() {

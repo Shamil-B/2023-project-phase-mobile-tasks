@@ -1,4 +1,6 @@
-class ToDoTask {
+import 'package:equatable/equatable.dart';
+
+class ToDoTask implements Equatable {
   final int id;
   final String title;
   final String? description;
@@ -16,4 +18,12 @@ class ToDoTask {
   factory ToDoTask.empty() {
     return ToDoTask(id: 0, title: "");
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id, title, description, deadline, isDone];
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => true;
 }

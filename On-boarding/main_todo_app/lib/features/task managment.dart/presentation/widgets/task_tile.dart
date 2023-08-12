@@ -36,30 +36,35 @@ class _TaskTileState extends State<TaskTile> {
           color: Colors.transparent,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
           child: ListTile(
-            leading: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Checkbox(
-                checkColor: Colors.white,
-                value: widget.task.isDone,
-                onChanged: (bool? value) {
-                  BlocProvider.of<TaskManagerBloc>(context)
-                      .add(TaskMarked(task: widget.task));
-                  setState(() {});
-                },
-              ),
+            leading: Checkbox(
+              checkColor: Colors.white,
+              value: widget.task.isDone,
+              onChanged: (bool? value) {
+                BlocProvider.of<TaskManagerBloc>(context)
+                    .add(TaskMarked(task: widget.task));
+                setState(() {
+                  widget.task.isDone = value!;
+                });
+              },
             ),
             title: Text(
               widget.task.title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  decoration: (widget.task.isDone)
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none),
             ),
             trailing: Container(
               width: 100,
-              margin: EdgeInsets.only(left: 20),
+              margin: const EdgeInsets.only(left: 20),
               child: Row(
                 children: [
                   Text(
                     "${widget.task.deadline!.day} - ${widget.task.deadline!.month} - ${widget.task.deadline!.year}",
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
