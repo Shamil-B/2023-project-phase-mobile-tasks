@@ -7,12 +7,14 @@ import '../entities/task.dart';
 import '../repository/task_repository.dart';
 
 class CreateTask {
-  final TaskRepositoryImpl repository;
+  final TaskRepository repository;
 
   CreateTask(this.repository);
 
-  Either<UnknownFailure, ToDoTask> call(ToDoTask newTask) {
-    if (repository.createTask(newTask).isRight()) {
+  Future<Either<UnknownFailure, ToDoTask>> call(ToDoTask newTask) async {
+    final response = await repository.createTask(newTask);
+
+    if (response.isRight()) {
       return Right(newTask);
     } else {
       return Left(UnknownFailure());

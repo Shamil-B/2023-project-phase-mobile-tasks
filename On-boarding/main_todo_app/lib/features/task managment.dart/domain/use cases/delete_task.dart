@@ -10,8 +10,9 @@ class DeleteTask {
 
   DeleteTask(this.repository);
 
-  Either<UnknownFailure, ToDoTask> call(int id) {
-    if (repository.deleteTask(id).isRight()) {
+  Future<Either<UnknownFailure, ToDoTask>> call(int id) async {
+    final response = await repository.deleteTask(id);
+    if (response.isRight()) {
       return Right(ToDoTask(id: 0, title: ""));
     } else {
       return Left(UnknownFailure());

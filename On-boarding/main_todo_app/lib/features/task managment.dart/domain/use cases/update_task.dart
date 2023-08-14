@@ -13,15 +13,18 @@ class UpdateTask {
 
   TaskRepositoryImpl repository;
 
-  Either<UnknownFailure, ToDoTask> call(
-          {required int id,
-          String? newTitle,
-          String? description,
-          DateTime? newDeadline}) =>
-      repository.updateTask(
-        id: id,
-        newTitle: newTitle,
-        description: description,
-        newDeadline: newDeadline,
-      );
+  Future<Either<UnknownFailure, ToDoTask>> call(
+      {required int id,
+      String? newTitle,
+      String? description,
+      DateTime? newDeadline}) async {
+    final response = await repository.updateTask(
+      id: id,
+      newTitle: newTitle,
+      description: description,
+      newDeadline: newDeadline,
+    );
+
+    return response;
+  }
 }

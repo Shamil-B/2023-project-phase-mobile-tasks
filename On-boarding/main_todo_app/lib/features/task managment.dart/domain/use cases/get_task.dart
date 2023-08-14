@@ -11,8 +11,8 @@ class GetTask {
 
   GetTask(this.repository);
 
-  Either<UnknownFailure, ToDoTask> call(int id) {
-    final result = repository.getTask(id);
+  Future<Either<UnknownFailure, ToDoTask>> call(int id) async {
+    final result = await repository.getTask(id);
     if (result.isRight()) {
       return Right(result.getOrElse(() => ToDoTask(id: 0, title: "")));
     } else {

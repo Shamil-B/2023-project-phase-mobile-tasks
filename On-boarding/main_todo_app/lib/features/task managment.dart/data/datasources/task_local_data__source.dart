@@ -1,17 +1,19 @@
+import 'package:main_todo_app/core/utils/shared_prefs_utility.dart';
+import 'package:main_todo_app/core/utils/shared_prefs_utility.dart';
 import '../../domain/entities/task.dart';
 
 abstract class TaskLocalDataSource {
-  List<ToDoTask> getTasks();
-  ToDoTask getTask(int id);
+  Future<List<ToDoTask>> getTasks();
+  Future<ToDoTask> getTask(int id);
 
-  void createTask(ToDoTask task);
-  ToDoTask markTask(ToDoTask task);
-  ToDoTask updateTask(
+  Future<void> createTask(ToDoTask task);
+  Future<void> markTask(ToDoTask task);
+  Future<void> updateTask(
       {required int id,
       String? newTitle,
       String? description,
       DateTime? newDeadline});
-  void deleteTask(int id);
+  Future<void> deleteTask(int id);
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource {
@@ -20,51 +22,70 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   List<ToDoTask> tasks;
 
   @override
-  void createTask(ToDoTask task) {
-    tasks.add(ToDoTask(
+  Future<void> createTask(ToDoTask task) async {
+    try {
+      List<ToDoTask> tasks = await loadTaskList('tasks');
+      tasks.add(ToDoTask(
         id: tasks.length,
         title: task.title,
         description: task.description,
-        deadline: task.deadline));
+        deadline: task.deadline,
+      ));
+      await saveTaskList(tasks, 'tasks');
+    } catch (e) {
+      print("Error in saving: $e");
+    }
   }
 
   @override
-  void deleteTask(int id) {
-    tasks.remove(tasks[id]);
+  Future<void> deleteTask(int id) {
+    loadTaskList('tasks').then((List<ToDoTask> tasks) {
+      tasks.remove(tasks[id]);
+      saveTaskList(tasks, 'tasks').then((value) => null);
+    });
+    throw ("Error in deleting task");
   }
 
   @override
-  ToDoTask getTask(int id) {
-    return tasks[id];
+  Future<ToDoTask> getTask(int id) {
+    loadTaskList('tasks').then((List<ToDoTask> tasks) {
+      return tasks[id];
+    });
+    throw ("error occured in getting task");
   }
 
   @override
-  List<ToDoTask> getTasks() {
+  Future<List<ToDoTask>> getTasks() async {
+    List<ToDoTask> tasks = await loadTaskList('tasks');
     return tasks;
   }
 
   @override
-  ToDoTask updateTask(
+  Future<void> updateTask(
       {required int id,
       String? newTitle,
       String? description,
-      DateTime? newDeadline}) {
+      DateTime? newDeadline}) async {
+    tasks = await loadTaskList('tasks');
+
     tasks[id] = ToDoTask(
         id: id,
         title: newTitle ?? tasks[id].title,
         description: description ?? tasks[id].description,
         deadline: newDeadline ?? tasks[id].deadline);
-    return tasks[id];
+
+    await saveTaskList(tasks, 'tasks');
   }
 
   @override
-  ToDoTask markTask(ToDoTask task) {
+  Future<void> markTask(ToDoTask task) async {
+    tasks = await loadTaskList('tasks');
     tasks[task.id] = ToDoTask(
         id: task.id,
         title: task.title,
         description: task.description,
         deadline: task.deadline,
         isDone: !task.isDone);
-    return tasks[task.id];
+    await saveTaskList(tasks, 'tasks');
   }
 }

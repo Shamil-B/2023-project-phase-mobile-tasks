@@ -10,10 +10,11 @@ class GetTasks {
 
   GetTasks(this.repository);
 
-  Either<UnknownFailure, List<ToDoTask>> call() {
-    final tasks = repository.getTasks();
+  Future<Either<UnknownFailure, List<ToDoTask>>> call() async {
+    final tasks = await repository.getTasks();
     if (tasks.isRight()) {
-      return Right(tasks.getOrElse(() => []));
+      final tmpTasks = tasks.getOrElse(() => []);
+      return Right(tmpTasks);
     } else {
       return Left(UnknownFailure());
     }

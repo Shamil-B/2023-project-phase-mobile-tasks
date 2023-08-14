@@ -20,10 +20,8 @@ class ToDoTask implements Equatable {
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, title, description, deadline, isDone];
 
   @override
-  // TODO: implement stringify
   bool? get stringify => true;
 }

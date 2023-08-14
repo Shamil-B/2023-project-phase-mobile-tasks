@@ -1,10 +1,10 @@
-import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:main_todo_app/core/network/network_info.dart';
 import 'package:main_todo_app/features/task%20managment.dart/data/datasources/task_local_data__source.dart';
 import 'package:main_todo_app/features/task%20managment.dart/data/repository/task_repository_implementation.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
-import 'package:main_todo_app/features/task%20managment.dart/domain/repository/task_repository.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/create_task.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/delete_task.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/get_task.dart';
@@ -20,10 +20,16 @@ List<ToDoTask> tasks = [];
 
 class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
   TaskManagerBloc() : super(TaskManagerInitial()) {
-    final TaskLocalDataSourceImpl localDataSource =
+    final InternetConnectionChecker connectionChecker =
+        InternetConnectionChecker();
+
+    final TaskLocalDataSource localDataSource =
         TaskLocalDataSourceImpl(tasks: tasks);
-    final TaskRepositoryImpl repository =
-        TaskRepositoryImpl(localDataSource: localDataSource);
+
+    final NetworkInfo networkInfo = NetworkInfoImpl(connectionChecker);
+
+    final TaskRepositoryImpl repository = TaskRepositoryImpl(
+        localDataSource: localDataSource, networkChecker: networkInfo);
 
     final GetTasks getTasks = GetTasks(repository);
     final GetTask getTask = GetTask(repository);
@@ -33,28 +39,31 @@ class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
     final MarkTask markTask = MarkTask(repository);
     final CreateTask createTask = CreateTask(repository);
 
-    on<TaskManagerEvent>((event, emit) {
+    on<TaskManagerEvent>((event, emit) async {
       if (event is TasksRequested) {
-        List<ToDoTask>? tasks = getTasks.call().isRight()
-            ? getTasks.call().getOrElse(() => [])
-            : null;
+        print("task requested");
+        final response = await getTasks.call();
+        List<ToDoTask>? tasks =
+            response.isRight() ? response.getOrElse(() => []) : null;
         emit(LoadedTasks(tasks: tasks ?? []));
       } else if (event is TaskRequested) {
-        ToDoTask task = getTask.call(event.task.id).isRight()
-            ? getTask.call(event.task.id).getOrElse(() => ToDoTask.empty())
+        final response = await getTask.call(event.task.id);
+        ToDoTask task = response.isRight()
+            ? response.getOrElse(() => ToDoTask.empty())
             : ToDoTask.empty();
         emit(TaskDetail(task: task));
       } else if (event is TaskAdded) {
-        createTask.call(event.task);
-        List<ToDoTask> tasks = getTasks.call().isRight()
-            ? getTasks.call().getOrElse(() => [])
-            : [];
+        await createTask.call(event.task);
+        final response = await getTasks.call();
+        List<ToDoTask> tasks =
+            response.isRight() ? response.getOrElse(() => []) : [];
+
         emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskDeleted) {
         deleteTask.call(event.task.id);
-        List<ToDoTask> tasks = getTasks.call().isRight()
-            ? getTasks.call().getOrElse(() => [])
-            : [];
+        final response = await getTasks.call();
+        List<ToDoTask> tasks =
+            response.isRight() ? response.getOrElse(() => []) : [];
         emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskMarked) {
         markTask.call(event.task);
@@ -65,13 +74,16 @@ class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
             newTitle: event.title,
             description: event.description,
             newDeadline: event.deadline);
-        List<ToDoTask> tasks = getTasks.call().isRight()
-            ? getTasks.call().getOrElse(() => [])
-            : [];
+
+        final response = await getTasks.call();
+        List<ToDoTask> tasks =
+            response.isRight() ? response.getOrElse(() => []) : [];
+
         emit(LoadedTasks(tasks: tasks));
       } else if (event is TaskRequested) {
-        ToDoTask task = getTask.call(event.task.id).isRight()
-            ? getTask.call(event.task.id).getOrElse(() => ToDoTask.empty())
+        final response = await getTask.call(event.task.id);
+        ToDoTask task = response.isRight()
+            ? response.getOrElse(() => ToDoTask.empty())
             : ToDoTask.empty();
         emit(TaskDetail(task: task));
       } else {

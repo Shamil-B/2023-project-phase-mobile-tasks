@@ -11,8 +11,9 @@ class MarkTask {
 
   MarkTask(this.repository);
 
-  Either<UnknownFailure, ToDoTask> call(ToDoTask task) {
-    if (repository.markTask(task).isRight()) {
+  Future<Either<UnknownFailure, ToDoTask>> call(ToDoTask task) async {
+    final response = await repository.markTask(task);
+    if (response.isRight()) {
       return Right(task);
     } else {
       return Left(UnknownFailure());

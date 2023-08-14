@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/task managment.dart/presentation/pages/home.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'features/task managment.dart/presentation/bloc/task_manager_bloc.dart';
 import "./features/task managment.dart/presentation/pages/onboarding.dart";
@@ -12,8 +11,7 @@ void main() {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) =>
-          const ProviderScope(child: MyApp()), // Wrap your app
+      builder: (context) => const ProviderScope(child: MyApp()),
     ),
   );
 }
