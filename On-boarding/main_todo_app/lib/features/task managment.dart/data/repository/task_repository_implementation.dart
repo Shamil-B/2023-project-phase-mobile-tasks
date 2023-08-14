@@ -19,7 +19,11 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Either<Failure, ToDoTask> createTask(ToDoTask task) {
     try {
-      localDataSource.createTask(task);
+      networkChecker.isConnected.then((isConnected) {
+        if (!isConnected) {
+          localDataSource.createTask(task);
+        }
+      });
       return Right(task);
     } catch (e) {
       return Left(UnknownFailure());
