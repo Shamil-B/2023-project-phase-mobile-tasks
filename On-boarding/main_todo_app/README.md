@@ -15,14 +15,11 @@ This is a task management Flutter app that follows the principles of Clean Archi
 - Getting Started
 - Dependencies
 - Contributing
-- License
 
 ### Features
 
 - Add, edit, and delete tasks.
 - Mark tasks as done.
-- Categorize tasks with labels.
-- Search and filter tasks.
 - Clean and intuitive user interface.
 
 ### Architecture
@@ -50,14 +47,11 @@ The data flow in this app follows a unidirectional flow, commonly known as "one-
 
 To get started with the app, follow these steps:
 
-- Clone the repository: git clone https://github.com/your-username/task-management-app.git
-- Navigate to the project directory: cd Onboarding/task-management-app
+- Clone the repository: git clone https://github.com/Shamil-B/2023-project-phase-mobile-tasks.git
+- Navigate to the project directory usind cd
 - Install dependencies: flutter pub get
 - Run the app: flutter run
 
 ### Contributing
 
 Contributions are welcome! If you find a bug or have an idea for a new feature, please open an issue or submit a pull request. Make sure to follow the existing code style and guidelines.
-
-License
-This project is licensed under the MIT License.
