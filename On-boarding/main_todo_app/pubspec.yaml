@@ -21,12 +21,12 @@ dependencies:
   # Functional programming thingies
   dartz:
   # Remote API
-  connectivity:
   http:
   # Local cache
   shared_preferences:
   device_preview: ^1.1.0
   flutter_riverpod: ^2.3.6
+  internet_connection_checker: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
