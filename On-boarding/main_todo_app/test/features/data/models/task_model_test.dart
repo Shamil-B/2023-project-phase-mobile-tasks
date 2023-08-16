@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:main_todo_app/features/task%20managment.dart/data/models/task_model.dart';
-import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
+import 'package:main_todo_app/features/task%20managment/data/models/task_model.dart';
+import 'package:main_todo_app/features/task%20managment/domain/entities/task.dart';
 import "package:main_todo_app/fixture_reader.dart";
 
 void main() {

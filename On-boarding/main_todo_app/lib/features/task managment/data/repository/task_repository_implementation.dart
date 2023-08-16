@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 
 import 'package:main_todo_app/core/error/failure.dart';
 import 'package:main_todo_app/core/error/unknown_failure.dart';
-import 'package:main_todo_app/features/task%20managment.dart/data/datasources/task_local_data__source.dart';
+import 'package:main_todo_app/features/task%20managment/data/datasources/task_local_data__source.dart';
 
-import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
+import 'package:main_todo_app/features/task%20managment/domain/entities/task.dart';
 import 'package:main_todo_app/core/network/network_info.dart';
 
 import '../../domain/repository/task_repository.dart';

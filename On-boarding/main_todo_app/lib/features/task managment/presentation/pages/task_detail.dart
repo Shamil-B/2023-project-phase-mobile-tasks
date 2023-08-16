@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
+import 'package:main_todo_app/features/task%20managment/domain/entities/task.dart';
 
 import '../bloc/task_manager_bloc.dart';
 import '../widgets/task_fields.dart';

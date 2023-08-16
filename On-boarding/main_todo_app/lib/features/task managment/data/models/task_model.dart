@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
+import 'package:main_todo_app/features/task%20managment/domain/entities/task.dart';
 
 class TaskModel extends ToDoTask implements Equatable {
   TaskModel(

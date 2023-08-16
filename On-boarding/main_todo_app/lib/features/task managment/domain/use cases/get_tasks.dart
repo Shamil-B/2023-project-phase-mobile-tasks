@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:main_todo_app/core/error/unknown_failure.dart';
-import 'package:main_todo_app/features/task%20managment.dart/domain/entities/task.dart';
+import 'package:main_todo_app/features/task%20managment/domain/entities/task.dart';
 
 import '../../../../core/error/failure.dart';
 import '../repository/task_repository.dart';

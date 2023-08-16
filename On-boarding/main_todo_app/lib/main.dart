@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import "package:flutter_bloc/flutter_bloc.dart";
-import 'features/task managment.dart/presentation/bloc/task_manager_bloc.dart';
-import "./features/task managment.dart/presentation/pages/onboarding.dart";
+import 'features/task managment/presentation/bloc/task_manager_bloc.dart';
+import "./features/task managment/presentation/pages/onboarding.dart";
 import 'injection_conainer.dart' as di;
 
 void main() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:main_todo_app/features/task%20managment.dart/presentation/bloc/task_manager_bloc.dart';
-import 'package:main_todo_app/features/task%20managment.dart/presentation/widgets/tasks_list.dart';
+import 'package:main_todo_app/features/task%20managment/presentation/bloc/task_manager_bloc.dart';
+import 'package:main_todo_app/features/task%20managment/presentation/widgets/tasks_list.dart';
 import '../widgets/task_tile.dart';
 
 class HomePage extends StatefulWidget {
