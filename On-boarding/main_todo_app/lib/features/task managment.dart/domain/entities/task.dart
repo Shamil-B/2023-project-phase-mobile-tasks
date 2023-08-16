@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class ToDoTask implements Equatable {
   final int id;
   final String title;

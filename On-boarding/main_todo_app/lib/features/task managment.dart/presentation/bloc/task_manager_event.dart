@@ -7,6 +7,7 @@ sealed class TaskManagerEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// TODO do not accept ToDoTask as parameter but only the fields and create a converter
 class TaskAdded extends TaskManagerEvent {
   final ToDoTask task;
   const TaskAdded({required this.task});

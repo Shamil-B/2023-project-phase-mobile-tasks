@@ -15,16 +15,21 @@ class UpdateTask {
 
   Future<Either<UnknownFailure, ToDoTask>> call(
       {required int id,
-      String? newTitle,
+      String? title,
       String? description,
       DateTime? newDeadline}) async {
     final response = await repository.updateTask(
       id: id,
-      newTitle: newTitle,
+      newTitle: title,
       description: description,
       newDeadline: newDeadline,
     );
 
-    return response;
+    return response.fold(
+      (failure) => Left(UnknownFailure()),
+      (task) {
+        return Right(task);
+      },
+    );
   }
 }

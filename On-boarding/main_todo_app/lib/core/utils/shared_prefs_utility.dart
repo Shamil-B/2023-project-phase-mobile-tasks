@@ -10,7 +10,7 @@ Future<void> saveTaskList(List<ToDoTask> taskList, String key) async {
 
   for (ToDoTask task in taskList) {
     String eTask =
-        "${task.id}#${(task.title != "") ? task.title : "no title"}#${task.description ?? '-1'}#${task.deadline ?? '-1'}#${task.isDone}";
+        "${task.id}#${(task.title != "") ? task.title : ""}#${task.description ?? '-1'}#${task.deadline ?? '-1'}#${task.isDone}";
 
     tasksEncoded.add(eTask);
   }
@@ -29,7 +29,8 @@ Future<List<ToDoTask>> loadTaskList(String key) async {
           id: int.parse(list[0]),
           title: list[1],
           description: (list[2] == "-1") ? "" : list[2],
-          deadline: DateTime.now(),
+          deadline:
+              (list[3] == "-1") ? DateTime.now() : DateTime.parse(list[3]),
           isDone: (list[4] == "true") ? true : false);
 
       tasks.add(task);

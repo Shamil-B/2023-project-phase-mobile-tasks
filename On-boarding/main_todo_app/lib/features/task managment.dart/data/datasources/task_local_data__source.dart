@@ -6,9 +6,9 @@ abstract class TaskLocalDataSource {
   Future<List<ToDoTask>> getTasks();
   Future<ToDoTask> getTask(int id);
 
-  Future<void> createTask(ToDoTask task);
+  Future<ToDoTask> createTask(ToDoTask task);
   Future<void> markTask(ToDoTask task);
-  Future<void> updateTask(
+  Future<ToDoTask> updateTask(
       {required int id,
       String? newTitle,
       String? description,
@@ -22,15 +22,35 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   List<ToDoTask> tasks;
 
   @override
-  Future<void> createTask(ToDoTask task) async {
+  Future<ToDoTask> createTask(ToDoTask task) async {
     try {
       List<ToDoTask> tasks = await loadTaskList('tasks');
+
       tasks.add(ToDoTask(
         id: tasks.length,
         title: task.title,
         description: task.description,
         deadline: task.deadline,
       ));
+
+      await saveTaskList(tasks, 'tasks');
+      return tasks.last;
+    } catch (e) {
+      print("Error in saving: $e");
+    }
+    throw ("Error in saving task");
+  }
+
+  @override
+  Future<void> deleteTask(int id) async {
+    try {
+      List<ToDoTask> tasks = await loadTaskList('tasks');
+      for (int i = 0; i < tasks.length; i++) {
+        if (tasks[i].id == id) {
+          tasks.removeAt(i);
+          break;
+        }
+      }
       await saveTaskList(tasks, 'tasks');
     } catch (e) {
       print("Error in saving: $e");
@@ -38,20 +58,14 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   }
 
   @override
-  Future<void> deleteTask(int id) {
-    loadTaskList('tasks').then((List<ToDoTask> tasks) {
-      tasks.remove(tasks[id]);
-      saveTaskList(tasks, 'tasks').then((value) => null);
-    });
-    throw ("Error in deleting task");
-  }
-
-  @override
-  Future<ToDoTask> getTask(int id) {
-    loadTaskList('tasks').then((List<ToDoTask> tasks) {
+  Future<ToDoTask> getTask(int id) async {
+    try {
+      final tasks = await loadTaskList('tasks');
       return tasks[id];
-    });
-    throw ("error occured in getting task");
+    } catch (e) {
+      print("Error in getting task: $e");
+    }
+    throw ("Error in getting task");
   }
 
   @override
@@ -61,20 +75,26 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   }
 
   @override
-  Future<void> updateTask(
+  Future<ToDoTask> updateTask(
       {required int id,
       String? newTitle,
       String? description,
       DateTime? newDeadline}) async {
     tasks = await loadTaskList('tasks');
+    int i = 0;
 
-    tasks[id] = ToDoTask(
-        id: id,
-        title: newTitle ?? tasks[id].title,
-        description: description ?? tasks[id].description,
-        deadline: newDeadline ?? tasks[id].deadline);
-
+    for (i; i < tasks.length; i++) {
+      if (tasks[i].id == id) {
+        tasks[i] = ToDoTask(
+            id: id,
+            title: newTitle ?? tasks[id].title,
+            description: description ?? tasks[id].description,
+            deadline: newDeadline ?? tasks[id].deadline);
+        break;
+      }
+    }
     await saveTaskList(tasks, 'tasks');
+    return tasks[i];
   }
 
   @override

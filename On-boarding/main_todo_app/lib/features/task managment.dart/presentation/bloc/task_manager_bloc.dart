@@ -10,7 +10,9 @@ import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/get_task.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/get_tasks.dart';
 import 'package:main_todo_app/features/task%20managment.dart/domain/use%20cases/update_task.dart';
+import 'package:main_todo_app/injection_conainer.dart';
 
+import '../../domain/repository/task_repository.dart';
 import '../../domain/use cases/mark_task.dart';
 
 part 'task_manager_event.dart';
@@ -20,72 +22,70 @@ List<ToDoTask> tasks = [];
 
 class TaskManagerBloc extends Bloc<TaskManagerEvent, TaskManagerState> {
   TaskManagerBloc() : super(TaskManagerInitial()) {
-    final InternetConnectionChecker connectionChecker =
-        InternetConnectionChecker();
+    final GetTasks getTasks = sl();
+    final GetTask getTask = sl();
 
-    final TaskLocalDataSource localDataSource =
-        TaskLocalDataSourceImpl(tasks: tasks);
-
-    final NetworkInfo networkInfo = NetworkInfoImpl(connectionChecker);
-
-    final TaskRepositoryImpl repository = TaskRepositoryImpl(
-        localDataSource: localDataSource, networkChecker: networkInfo);
-
-    final GetTasks getTasks = GetTasks(repository);
-    final GetTask getTask = GetTask(repository);
-
-    final DeleteTask deleteTask = DeleteTask(repository);
-    final UpdateTask updateTask = UpdateTask(repository);
-    final MarkTask markTask = MarkTask(repository);
-    final CreateTask createTask = CreateTask(repository);
+    final DeleteTask deleteTask = sl();
+    final UpdateTask updateTask = sl();
+    final MarkTask markTask = sl();
+    final CreateTask createTask = sl();
 
     on<TaskManagerEvent>((event, emit) async {
       if (event is TasksRequested) {
-        print("task requested");
+        emit(Loading());
         final response = await getTasks.call();
-        List<ToDoTask>? tasks =
-            response.isRight() ? response.getOrElse(() => []) : null;
-        emit(LoadedTasks(tasks: tasks ?? []));
-      } else if (event is TaskRequested) {
-        final response = await getTask.call(event.task.id);
-        ToDoTask task = response.isRight()
-            ? response.getOrElse(() => ToDoTask.empty())
-            : ToDoTask.empty();
-        emit(TaskDetail(task: task));
-      } else if (event is TaskAdded) {
-        await createTask.call(event.task);
-        final response = await getTasks.call();
-        List<ToDoTask> tasks =
-            response.isRight() ? response.getOrElse(() => []) : [];
 
-        emit(LoadedTasks(tasks: tasks));
+        response.fold(
+            (failure) => emit(const Error(message: "Error getting tasks")),
+            (tasks) => emit(LoadedTasks(tasks: tasks)));
+      } else if (event is TaskRequested) {
+        emit(Loading());
+        final response = await getTask.call(event.task.id);
+        response.fold(
+            (failure) => emit(const Error(message: "Error getting task")),
+            (task) => emit(TaskDetail(task: task)));
+      } else if (event is TaskAdded) {
+        emit(Loading());
+        final task = await createTask.call(event.task);
+        if (task.isRight()) {
+          final response = await getTasks.call();
+          response.fold(
+              (failure) => emit(const Error(message: "Error creating task")),
+              (tasks) => emit(LoadedTasks(tasks: tasks)));
+        }
       } else if (event is TaskDeleted) {
-        deleteTask.call(event.task.id);
-        final response = await getTasks.call();
-        List<ToDoTask> tasks =
-            response.isRight() ? response.getOrElse(() => []) : [];
-        emit(LoadedTasks(tasks: tasks));
+        emit(Loading());
+        final task = await deleteTask.call(event.task.id);
+        if (task.isRight()) {
+          final response = await getTasks.call();
+          response.fold(
+              (failure) => emit(const Error(message: "Error deleting task")),
+              (tasks) => emit(LoadedTasks(tasks: tasks)));
+        }
       } else if (event is TaskMarked) {
-        markTask.call(event.task);
-        // emit(LoadedTasks(tasks: tasks));
+        await markTask.call(event.task);
       } else if (event is TaskUpdated) {
-        updateTask.call(
+        emit(Loading());
+        final task = await updateTask.call(
             id: event.id,
-            newTitle: event.title,
+            title: event.title,
             description: event.description,
             newDeadline: event.deadline);
 
-        final response = await getTasks.call();
-        List<ToDoTask> tasks =
-            response.isRight() ? response.getOrElse(() => []) : [];
-
-        emit(LoadedTasks(tasks: tasks));
+        if (task.isRight()) {
+          final response = await getTasks.call();
+          response.fold(
+              (failure) => emit(const Error(message: "Error updating task")),
+              (tasks) => emit(LoadedTasks(tasks: tasks)));
+        } else {
+          emit(const Error(message: "Error updating task"));
+        }
       } else if (event is TaskRequested) {
+        emit(Loading());
         final response = await getTask.call(event.task.id);
-        ToDoTask task = response.isRight()
-            ? response.getOrElse(() => ToDoTask.empty())
-            : ToDoTask.empty();
-        emit(TaskDetail(task: task));
+        response.fold(
+            (failure) => emit(const Error(message: "Error getting task")),
+            (task) => emit(TaskDetail(task: task)));
       } else {
         emit(EmptyTasks());
       }

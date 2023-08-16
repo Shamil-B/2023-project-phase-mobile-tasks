@@ -11,18 +11,27 @@ class TaskDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleController = TextEditingController(text: task.title);
+    final descriptionController = TextEditingController(text: task.description);
+    final deadlineController = TextEditingController(
+        text: (task.deadline != null)
+            ? ("${task.deadline?.year.toString() ?? ""}-${task.deadline?.month.toString() ?? ""}-${task.deadline?.day.toString() ?? ""}")
+            : "no deadline set");
+
     List<Widget> tasks = [
-      TaskField(title: task.title, label: "Title"),
+      TaskField(title: task.title, label: "Title", controller: titleController),
       TaskField(
         title:
             task.description == null ? "no description set" : task.description!,
         label: "Description",
+        controller: descriptionController,
       ),
       TaskField(
         title: (task.deadline != null)
-            ? ("${task.deadline?.day.toString() ?? ""}/${task.deadline?.month.toString() ?? ""}/${task.deadline?.year.toString() ?? ""}")
+            ? ("${task.deadline?.day.toString() ?? ""}-${task.deadline?.month.toString() ?? ""}-${task.deadline?.year.toString() ?? ""}")
             : "no deadline set",
         label: "Deadline",
+        controller: deadlineController,
       ),
     ];
 
@@ -64,7 +73,15 @@ class TaskDetail extends StatelessWidget {
                       padding: MaterialStatePropertyAll(
                           EdgeInsets.symmetric(vertical: 15, horizontal: 30)),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      BlocProvider.of<TaskManagerBloc>(context).add(TaskUpdated(
+                        id: task.id,
+                        title: titleController.text,
+                        description: descriptionController.text,
+                        deadline: DateTime.parse(deadlineController.text),
+                      ));
+                      Navigator.pop(context);
+                    },
                     child: const Text(
                       "Save",
                       style: TextStyle(color: Colors.white, fontSize: 22),

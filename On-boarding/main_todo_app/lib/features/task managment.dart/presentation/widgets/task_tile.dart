@@ -35,40 +35,56 @@ class _TaskTileState extends State<TaskTile> {
         child: Container(
           color: Colors.transparent,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-          child: ListTile(
-            leading: Checkbox(
-              checkColor: Colors.white,
-              value: widget.task.isDone,
-              onChanged: (bool? value) {
-                BlocProvider.of<TaskManagerBloc>(context)
-                    .add(TaskMarked(task: widget.task));
-                setState(() {
-                  widget.task.isDone = value!;
-                });
-              },
-            ),
-            title: Text(
-              widget.task.title,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  decoration: (widget.task.isDone)
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none),
-            ),
-            trailing: Container(
-              width: 100,
-              margin: const EdgeInsets.only(left: 20),
-              child: Row(
-                children: [
-                  Text(
-                    "${widget.task.deadline!.day} - ${widget.task.deadline!.month} - ${widget.task.deadline!.year}",
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                ],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Checkbox(
+                checkColor: Colors.white,
+                value: widget.task.isDone,
+                onChanged: (bool? value) {
+                  BlocProvider.of<TaskManagerBloc>(context)
+                      .add(TaskMarked(task: widget.task));
+                  setState(() {
+                    widget.task.isDone = value!;
+                  });
+                },
               ),
-            ),
+              Text(
+                widget.task.title.characters.length > 10
+                    ? "${widget.task.title.substring(0, 10)}..."
+                    : widget.task.title,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    decoration: (widget.task.isDone)
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none),
+              ),
+              Container(
+                // width: 100,
+                margin: const EdgeInsets.only(left: 20),
+                child: Row(
+                  children: [
+                    Text(
+                      "${widget.task.deadline!.day} - ${widget.task.deadline!.month} - ${widget.task.deadline!.year}",
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        BlocProvider.of<TaskManagerBloc>(context)
+                            .add(TaskDeleted(task: widget.task));
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

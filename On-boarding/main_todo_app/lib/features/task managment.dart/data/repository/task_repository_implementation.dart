@@ -19,14 +19,14 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<Either<Failure, ToDoTask>> createTask(ToDoTask task) async {
     try {
-      networkChecker.isConnected.then((isConnected) async {
-        if (!isConnected) {
-          await localDataSource.createTask(task);
-        } else {
-          await localDataSource.createTask(task);
-        }
-      });
-      return Right(task);
+      ToDoTask newTask = await localDataSource.createTask(task);
+      // networkChecker.isConnected.then((isConnected) async {
+      //   if (!isConnected) {
+      //   } else {
+      //     await localDataSource.createTask(task);
+      //   }
+      // });
+      return Right(newTask);
     } catch (e) {
       return Left(UnknownFailure());
     }
@@ -69,12 +69,12 @@ class TaskRepositoryImpl implements TaskRepository {
       String? description,
       DateTime? newDeadline}) async {
     try {
-      await localDataSource.updateTask(
+      final task = await localDataSource.updateTask(
           id: id,
           newTitle: newTitle,
           description: description,
           newDeadline: newDeadline);
-      return Right(ToDoTask(id: 0, title: ""));
+      return Right(task);
     } catch (e) {
       return Left(UnknownFailure());
     }

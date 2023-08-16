@@ -6,8 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'features/task managment.dart/presentation/bloc/task_manager_bloc.dart';
 import "./features/task managment.dart/presentation/pages/onboarding.dart";
+import 'injection_conainer.dart' as di;
 
-void main() {
+void main() async {
+  await di.init();
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
@@ -17,7 +20,6 @@ void main() {
 }
 
 // in order to provide the bloc to the widget tree, we need to wrap the widget tree with BlocProvider
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

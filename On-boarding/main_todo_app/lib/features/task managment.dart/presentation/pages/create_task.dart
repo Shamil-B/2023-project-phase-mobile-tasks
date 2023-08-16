@@ -143,14 +143,14 @@ class CreateTaskPage extends StatelessWidget {
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("description",
-                              style: const TextStyle(
+                          const Text("description",
+                              style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFFEE6F57))),
                           TextField(
                             controller: descriptionController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: "descripion of the task",
                               hintStyle: TextStyle(
                                 fontSize: 20,
@@ -176,10 +176,13 @@ class CreateTaskPage extends StatelessWidget {
                         MaterialStatePropertyAll(Color(0xFFEE6F57))),
                 onPressed: () {
                   ToDoTask task = ToDoTask(
-                      id: 0,
-                      title: titleController.text,
-                      description: descriptionController.text,
-                      deadline: DateTime.now());
+                    id: 0,
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    deadline: DateTime.parse(deadlineController.text == ""
+                        ? (DateTime.now().toString())
+                        : deadlineController.text),
+                  );
                   Navigator.pop(context, task);
                 },
                 child: const Text(

@@ -20,3 +20,10 @@ class TaskDetail extends TaskManagerState {
   final ToDoTask task;
   const TaskDetail({required this.task});
 }
+
+class Error extends TaskManagerState {
+  final String message;
+  const Error({required this.message});
+}
+
+class Loading extends TaskManagerState {}
